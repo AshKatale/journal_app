@@ -39,7 +39,7 @@ public class SpringSecurity {
 
         return http.build();
     }
-
+    //test
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
