@@ -1,0 +1,10 @@
+#precedence : terminal > application.properties > application.yml
+spring:
+  profiles:
+    active: dev
+
+logging:
+  level:
+    com:
+      journal:
+        Journal: DEBUG
