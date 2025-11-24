@@ -1,6 +1,7 @@
 package com.journal.Journal.controller;
 
 import com.journal.Journal.api.response.WeatherApiResponse;
+import com.journal.Journal.cache.AppCache;
 import com.journal.Journal.entity.User;
 import com.journal.Journal.service.UserService;
 import com.journal.Journal.service.WeatherService;
@@ -18,6 +19,9 @@ public class PublicController {
 
     @Autowired
     private WeatherService weatherService;
+
+    @Autowired
+    private AppCache appCache;
 
     @GetMapping("/health-check")
     public String healthCheck(){
@@ -40,5 +44,10 @@ public class PublicController {
             return new ResponseEntity<>("Hi, Todays weather feels like :"+weatherApiResponse.getMain().getFeelsLike(),HttpStatus.OK);
 
         return new ResponseEntity<>("Hi No Response to show",HttpStatus.OK);
+    }
+
+    @GetMapping("/cache-refresh")
+    public void AppChacheRefresh() {
+        appCache.init();
     }
 }
