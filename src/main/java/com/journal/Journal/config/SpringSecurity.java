@@ -1,5 +1,6 @@
 package com.journal.Journal.config;
 
+import com.journal.Journal.filters.JwtFilter;
 import com.journal.Journal.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,20 +24,25 @@ public class SpringSecurity {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/journal/**","/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/journal/**", "/user/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
-                .authenticationProvider(authenticationProvider());
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

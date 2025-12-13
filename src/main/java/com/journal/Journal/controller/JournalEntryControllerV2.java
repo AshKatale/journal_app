@@ -37,7 +37,7 @@ public class JournalEntryControllerV2 {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("{userName}")
+    @PostMapping("/{userName}")
     public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String userName) {
         myEntry.setDate(LocalDateTime.now());
         User user = userService.findByUsername(userName);
@@ -74,5 +74,11 @@ public class JournalEntryControllerV2 {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         journalEntryService.deleteById(id,userName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllEntires() {
+        List<JournalEntry> allEntries = journalEntryService.getAllEntries();
+        return new ResponseEntity<>(allEntries,HttpStatus.OK);
     }
 }
