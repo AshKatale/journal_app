@@ -10,7 +10,7 @@ public class SentimentConsumerService {
     @Autowired
     private EmailService emailService;
 
-    @KafkaListener(topics = "weekly.sentiment",groupId = "weekly.sentiment.grp")
+    @KafkaListener(topics = "weekly.sentiment",groupId = "weekly.sentiment.grp", autoStartup = "false")
     public void consume(SentimentData sentimentData) {
         sendMail(sentimentData);
         System.out.println("Mail Sent to :"+sentimentData.getEmail());
