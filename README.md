@@ -89,12 +89,6 @@ docker run -e MONGO_URI=... -e REDIS_URI=... -e GMAIL_USERNAME=... -e GMAIL_PASS
 
 Protected routes: `/journal/**` and `/user/**` require a valid JWT in `Authorization` header.
 
-## Notes & TODOs
-
-- Secrets should not be hardcoded (`JwtUtil` secret). Move to environment variables or a secrets manager.
-- Consider enabling Kafka consumer autoStartup or provide a flag to control it (currently the consumer has `autoStartup = "false"`).
-- Add more robust integration tests and CI configuration.
-
 ## Useful files
 
 - `src/main/resources/application.yml` — main configuration
@@ -105,7 +99,4 @@ Protected routes: `/journal/**` and `/user/**` require a valid JWT in `Authoriza
 - `src/main/java/.../service/KafkaPublishService.java` and `SentimentConsumerService.java` — Kafka producer/consumer
 
 ## License
-
-This project does not include an explicit license. Add one if you intend to open-source it.
-
-If you want, I can also add a quick run script, update the `application.yml` to read JWT secret from env, or add example `curl` commands for the main flows.
+MIT
