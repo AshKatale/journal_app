@@ -1,20 +1,17 @@
-# -------- STAGE 1: Build --------
-FROM eclipse-temurin:21-jdk-alpine AS builder
+# ---------- STAGE 1: Build ----------
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
-WORKDIR /app
-
+WORKDIR /build
 COPY pom.xml .
 COPY src ./src
 
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# -------- STAGE 2: Run --------
+# ---------- STAGE 2: Run ----------
 FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
-
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /build/target/*.jar app.jar
 
 EXPOSE 8081
-
 ENTRYPOINT ["java","-jar","app.jar"]
